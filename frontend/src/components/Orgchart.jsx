@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { OrganizationChart } from 'primereact/organizationchart';
-import './OrgChart.css'; // Ensure this CSS file is linked
+import './OrgChart.css'; 
 
 export default function SelectionDemo() {
     const [selection, setSelection] = useState([]);
@@ -69,7 +69,7 @@ export default function SelectionDemo() {
         }
     ]);
 
-    // Updated userTemplate to show only the role (title)
+    
     const userTemplate = (user) => {
         if (user.type === 'person') {
             return (

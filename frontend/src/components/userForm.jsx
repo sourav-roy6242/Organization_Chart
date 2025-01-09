@@ -1,8 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import "./userform.css"; // Import the CSS file
+import { useNavigate } from "react-router-dom";
+import "./userform.css";
 
 function UserForm() {
+    const navigate = useNavigate(); 
     const {
         register,
         handleSubmit,
@@ -22,11 +24,33 @@ function UserForm() {
         { value: "worker4", label: "Worker 2 (Under Shift Supervisor)" },
     ];
 
-    async function onSubmit(data) {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Submitting the form", data);
-        reset();
-    }
+    
+    const onSubmit = async (data) => {
+        try {
+            const res = await fetch("http://localhost:8000/api/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await res.json();
+
+            if (res.status === 400 || !result) {
+                window.alert("Invalid data entry");
+                console.log("Invalid data entry");
+            } else {
+                window.alert("Data added successfully");
+                console.log("Data added successfully");
+                reset();
+                navigate("/Org-chart"); 
+            }
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            window.alert("Something went wrong. Please try again.");
+        }
+    };
 
     return (
         <div className="container">
@@ -66,3 +90,4 @@ function UserForm() {
 }
 
 export default UserForm;
+

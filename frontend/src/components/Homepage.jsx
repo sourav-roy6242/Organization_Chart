@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Make sure Link is imported correctly
+import { Link } from 'react-router-dom'; 
 import './Homepage.css';
 
 const Homepage = () => {
@@ -12,7 +12,7 @@ const Homepage = () => {
           <p className="hero-subtitle">
             Visualize and manage your organization's structure seamlessly.
           </p>
-          {/* Button replaced by Link */}
+          
           <Link to="/Org-chart" className="cta-button">
             Explore Organizational Chart
           </Link>
@@ -27,7 +27,7 @@ const Homepage = () => {
             <p>
               Explore the hierarchy and understand roles within the organization.
             </p>
-            {/* Using Link here to navigate to /Org-chart */}
+           
             <Link to="/Org-chart" className="nav-button">
               Go to Chart
             </Link>
