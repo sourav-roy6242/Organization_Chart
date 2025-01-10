@@ -1,8 +1,12 @@
 const User = require("../models/user");
 
 async function handleGetAllUsers(req, res) {
-    const allDbUsers = await User.find({});
-    return res.json(allDbUsers);
+    try {
+        const allUsers = await User.find({});
+        res.json(allUsers);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch users' });
+    }
 }
 
 async function handlegetUserById(req, res) {
