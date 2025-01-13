@@ -1,112 +1,110 @@
-Overall container for the organization chart
-.org-chart-card {
-    background: #f4f7fb;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
-    margin: 20px auto;
-    max-width: 1300px;
-    font-family: 'Arial', sans-serif;
+/* OrgChart.css */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  color: #333;
 }
 
-/* User container (individual user's box) */
-.user-container {
-    background: linear-gradient(145deg, #ffffff, #e1f5fe);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin: 20px;
-    transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 2rem;
+  color: #0056b3;
 }
 
-.user-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.15);
+/* Org Chart container */
+.org-chart {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
 }
 
-/* Image styling for user nodes */
-.user-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #007BFF;
-    margin-bottom: 15px;
-    transition: transform 0.3s ease;
+.org-chart-item {
+  text-align: center;
+  margin: 20px;
+  position: relative;
 }
 
-.user-image:hover {
-    transform: scale(1.1);
+.org-chart-item::before,
+.org-chart-item::after {
+  content: "";
+  position: absolute;
+  border: 2px solid #ccc;
+  top: -10px;
+  width: 50%;
+  height: 10px;
 }
 
-/* User details (Role / Title) */
-.user-details {
-    text-align: center;
+.org-chart-item::before {
+  left: -50%;
+  border-right: none;
 }
 
-.user-title {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #333;
-    margin-bottom: 5px;
-    transition: color 0.3s ease;
+.org-chart-item::after {
+  right: -50%;
+  border-left: none;
 }
 
-/* Worker-specific styles */
-.worker-user-container {
-    background: #d0eaff; /* Light blue color for workers */
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.12);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin: 20px;
-    transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+.org-chart-item:first-child::before {
+  display: none;
 }
 
-.worker-user-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+.org-chart-item:last-child::after {
+  display: none;
 }
 
-/* Worker image and text */
-.worker-user-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #3498db;
-    margin-bottom: 15px;
+/* Lines between levels */
+.org-chart .org-chart-item > .org-chart-item {
+  margin-top: 30px;
 }
 
-.worker-user-name {
-    font-size: 1.2rem;
-    color: #34495e;
-    font-weight: 600;
-    margin-bottom: 5px;
+.org-chart-item > ul {
+  margin: 10px 0 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.worker-user-title {
-    font-size: 1rem;
-    color: #7f8c8d;
-    font-style: italic;
+.org-chart-item > ul > li::before {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 20px;
+  background-color: #ccc;
+  left: 50%;
+  top: -20px;
 }
 
-/* Additional badge or icon for workers */
-.worker-user-badge {
-    font-size: 0.9rem;
-    background-color: #3498db;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 12px;
-    margin-top: 10px;
-    font-weight: 600;
+/* Card styling for each role */
+.org-chart-item div {
+  display: inline-block;
+  padding: 15px 20px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+/* Role-based color coding */
+.ceo {
+  background-color: #1e88e5;
+}
+
+.manager {
+  background-color: #43a047;
+}
+
+.hod {
+  background-color: #fb8c00;
+}
+
+.supervisor {
+  background-color: #8e24aa;
+}
+

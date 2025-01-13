@@ -107,36 +107,150 @@
 
 
 
-import { useEffect, useState } from "react";
-import axios from "axios";
+// import { useEffect, useState } from "react";
+// import axios from "axios";
 
-function OrgChart() {
-    const [users, setUsers] = useState([]);
+// function OrgChart() {
+//     const [users, setUsers] = useState([]);
 
-    useEffect(() => {
+//     useEffect(() => {
         
-        axios
-            .get("http://localhost:8000/api/users")
-            .then((response) => setUsers(response.data)) 
-            .catch((err) => console.log("Error fetching users:", err));
-    }, []);
+//         axios
+//             .get("http://localhost:8000/api/users")
+//             .then((response) => setUsers(response.data)) 
+//             .catch((err) => console.log("Error fetching users:", err));
+//     }, []);
 
-    return (
-        <div>
-            <h1>Org Chart</h1>
-            <ul>
+//     return (
+//         <div>
+//             <h1>Org Chart</h1>
+//             <ul>
                
-                {users.map((user) => (
-                    <li key={user._id}>
-                        <strong>Role:</strong> {user.role} <br />
-                        <strong>Reporting To:</strong> {user.reporting || "None"}
-                    </li>
-                ))}
-            </ul>
-        </div>
+//                 {users.map((user) => (
+//                     <li key={user._id}>
+//                         <strong>Role:</strong> {user.role} <br />
+//                         <strong>Reporting To:</strong> {user.reporting || "None"}
+//                     </li>
+//                 ))}
+//             </ul>
+//         </div>
+//     );
+// }
+
+// export default OrgChart;
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useState, useEffect } from "react";
+import "./OrgChart.css";
+
+const OrgChart = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/api/users", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const result = await res.json();
+        console.log("API Response:", result); 
+
+        if (res.ok) {
+          setUsers(result);
+        } else {
+          window.alert("Failed to fetch users");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        window.alert("Something went wrong. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []); 
+
+
+  const buildHierarchy = (employees, parentId = undefined) => {
+    return employees
+      .filter((employee) => employee.reporting === parentId)
+      .map((employee) => ({
+        ...employee,
+        children: buildHierarchy(employees, employee._id),
+      }));
+  };
+
+  
+  const OrganizationChart = ({ hierarchy }) => {
+    return (
+      <ul className="org-chart">
+        {hierarchy.map((employee) => (
+          <li key={employee._id} className="org-chart-item">
+            <div className={getRoleClass(employee.role)}>
+             
+              <strong>{employee.role}</strong>
+              <p>Reporting to: {employee.reporting}</p>
+            </div>
+            {employee.children.length > 0 && (
+              <OrganizationChart hierarchy={employee.children} />
+            )}
+          </li>
+        ))}
+      </ul>
     );
-}
+  };
+
+
+  const getRoleClass = (role) => {
+    switch (role.toLowerCase()) {
+      case "ceo":
+        return "ceo";
+      case "manager":
+        return "manager";
+      case "hod1":
+      case "hod2":
+        return "hod";
+      case "shift supervisor":
+        return "supervisor";
+      case "worker1":
+      case "worker2":
+        return "worker";
+      default:
+        return "";
+    }
+  };
+
+
+  const hierarchy = !loading ? buildHierarchy(users) : [];
+
+  return (
+    <div>
+      <h1>Org Chart</h1>
+      {loading ? (
+        <p>Loading...</p> 
+      ) : (
+        <OrganizationChart hierarchy={hierarchy} />
+      )}
+    </div>
+  );
+};
 
 export default OrgChart;
-
 
