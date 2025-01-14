@@ -1,110 +1,38 @@
-/* OrgChart.css */
+/* Organization Chart container styling */
+.organization-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
 
-body {
+/* Node content styling */
+.node-content {
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #d3d3d3;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f8f9fa;
+  max-width: 150px;
+}
+
+/* Text styling */
+.node-content strong {
+  font-size: 14px;
   color: #333;
 }
 
-h1 {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 2rem;
-  color: #0056b3;
+.node-content p {
+  font-size: 12px;
+  color: #555;
+  margin: 5px 0 0 0;
 }
 
-/* Org Chart container */
-.org-chart {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  position: relative;
+/* Hover effect */
+.node-content:hover {
+  background-color: #f0f8ff;
+  border-color: #007ad9;
+  transition: background-color 0.3s, border-color 0.3s;
 }
-
-.org-chart-item {
-  text-align: center;
-  margin: 20px;
-  position: relative;
-}
-
-.org-chart-item::before,
-.org-chart-item::after {
-  content: "";
-  position: absolute;
-  border: 2px solid #ccc;
-  top: -10px;
-  width: 50%;
-  height: 10px;
-}
-
-.org-chart-item::before {
-  left: -50%;
-  border-right: none;
-}
-
-.org-chart-item::after {
-  right: -50%;
-  border-left: none;
-}
-
-.org-chart-item:first-child::before {
-  display: none;
-}
-
-.org-chart-item:last-child::after {
-  display: none;
-}
-
-/* Lines between levels */
-.org-chart .org-chart-item > .org-chart-item {
-  margin-top: 30px;
-}
-
-.org-chart-item > ul {
-  margin: 10px 0 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.org-chart-item > ul > li::before {
-  content: "";
-  position: absolute;
-  width: 2px;
-  height: 20px;
-  background-color: #ccc;
-  left: 50%;
-  top: -20px;
-}
-
-/* Card styling for each role */
-.org-chart-item div {
-  display: inline-block;
-  padding: 15px 20px;
-  border-radius: 8px;
-  color: #fff;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Role-based color coding */
-.ceo {
-  background-color: #1e88e5;
-}
-
-.manager {
-  background-color: #43a047;
-}
-
-.hod {
-  background-color: #fb8c00;
-}
-
-.supervisor {
-  background-color: #8e24aa;
-}
-
