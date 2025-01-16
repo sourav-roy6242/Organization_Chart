@@ -376,7 +376,10 @@ import Tree from "react-d3-tree";
 const OrgChart = () => {
   const [treeData, setTreeData] = useState(null);
   const [activeNode, setActiveNode] = useState(null);
-  const [updateFormData, setUpdateFormData] = useState(null); // Track form data for updates
+  const [updateFormData, setUpdateFormData] = useState(null);
+  const [isTreeBlurred, setIsTreeBlurred] = useState(false);
+
+
 
   const transformData = (apiData) => {
     const nodes = {};
@@ -478,29 +481,28 @@ const OrgChart = () => {
     // Open the form for updating the node
     setUpdateFormData({
       id: nodeDatum.id,
-      name: nodeDatum.name,
+      role: nodeDatum.name,
+      reportingTo: "",
     });
+    setIsTreeBlurred(true);
   };
 
+ 
   const handleSubmitUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(
-        `http://localhost:8000/api/users/${updateFormData.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            role: updateFormData.name,
-          }),
-        }
-      );
+      const res = await fetch(`http://localhost:8000/api/users/${updateFormData.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          role: updateFormData.role,
+          reportingTo: updateFormData.reportingTo,
+        }),
+      });
 
       if (res.ok) {
-        console.log("Node updated successfully");
         setUpdateFormData(null); // Close the form
+        setIsTreeBlurred(false); // Remove blur
         fetchTreeData(); // Refresh the tree
       } else {
         console.error("Failed to update node");
@@ -509,7 +511,6 @@ const OrgChart = () => {
       console.error("Error updating node:", error);
     }
   };
-
   const nodeColors = {
     CEO: "#E6E6FA",
     Manager: "#E3F2FD",
@@ -560,7 +561,7 @@ const OrgChart = () => {
           >
             ⋮
           </div>
-         
+
           {/* Dropdown Menu */}
           {activeNode === nodeDatum && (
             <div
@@ -592,8 +593,8 @@ const OrgChart = () => {
                 }}
                 onMouseOver={(e) => (e.target.style.background = "#357ABD")}
                 onMouseOut={(e) =>
-                  (e.target.style.background =
-                    "linear-gradient(135deg, #4A90E2, #357ABD)")
+                (e.target.style.background =
+                  "linear-gradient(135deg, #4A90E2, #357ABD)")
                 }
                 onClick={(e) => {
                   e.stopPropagation();
@@ -618,8 +619,8 @@ const OrgChart = () => {
                 }}
                 onMouseOver={(e) => (e.target.style.background = "#C0392B")}
                 onMouseOut={(e) =>
-                  (e.target.style.background =
-                    "linear-gradient(135deg, #E74C3C, #C0392B)")
+                (e.target.style.background =
+                  "linear-gradient(135deg, #E74C3C, #C0392B)")
                 }
                 onClick={(e) => {
                   e.stopPropagation();
@@ -647,35 +648,48 @@ const OrgChart = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+
       }}
     >
       <div style={{ width: "90%", height: "90%" }}>
-        <Tree
-          data={treeData}
-          collapsible={true}
-          nodeSize={{ x: 200, y: 100 }}
-          separation={{ siblings: 1.5, nonSiblings: 2 }}
-          renderCustomNodeElement={(rd3tProps) =>
-            renderForeignObjectNode({
-              ...rd3tProps,
-              foreignObjectProps: {
-                width: 150,
-                height: 100,
-                x: -60,
-                y: -20,
-              },
-            })
-          }
-          orientation="vertical"
-        />
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            filter: isTreeBlurred ? "blur(5px)" : "none",
+          }}
+        >
+
+          <Tree
+            data={treeData}
+            collapsible={true}
+            nodeSize={{ x: 200, y: 100 }}
+            separation={{ siblings: 1.5, nonSiblings: 2 }}
+            renderCustomNodeElement={(rd3tProps) =>
+              renderForeignObjectNode({
+                ...rd3tProps,
+                foreignObjectProps: {
+                  width: 150,
+                  height: 100,
+                  x: -70,
+                  y: -20,
+                },
+              })
+            }
+            orientation="vertical"
+
+          />
+        </div>
+
         {/* Update Form */}
         {updateFormData && (
           <div
             style={{
+              width: "300px",
               position: "fixed",
               top: "20%",
               left: "50%",
-              transform: "translate(-50%, -50%)",
+              transform: "translate(-40%, -40%)",
               backgroundColor: "white",
               padding: "20px",
               borderRadius: "10px",
@@ -695,11 +709,45 @@ const OrgChart = () => {
                       name: e.target.value,
                     })
                   }
+                  style={{ width: "90%", margin: "10px 0", padding: "10px",marginLeft:"3px" }}
+                />
+              </label>
+              <label>
+                Reporting To:
+                <input
+                  type="text"
+                  value={updateFormData.reportingTo}
+                  onChange={(e) =>
+                    setUpdateFormData({
+                      ...updateFormData,
+                      reportingTo: e.target.value,
+                    })
+                  }
+                  style={{width: "90%", margin: "10px 0", padding: "10px",marginLeft:"3px" }}
                 />
               </label>
               <br />
-              <button type="submit">Submit</button>
-              <button type="button" onClick={() => setUpdateFormData(null)}>
+              <button type="submit" style={{
+                marginRight: "10px",
+                padding: "10px 20px",
+                backgroundColor: "#4CAF50",
+                color: "white",
+                border: "none",
+                borderRadius: "15px",
+                marginLeft: "55px",
+              }}>Submit</button>
+              <button type="button" onClick={() => {
+                setUpdateFormData(null);
+                setIsTreeBlurred(false);
+              }}
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "#E74C3C",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "15px",
+                }}
+              >
                 Cancel
               </button>
             </form>
@@ -711,7 +759,4 @@ const OrgChart = () => {
 };
 
 export default OrgChart;
-
-
-
 
