@@ -13,6 +13,19 @@ This project is an interactive organization tree built with React.js, MongoDB, a
 - Real-time Updates: The tree automatically updates after a user action (add, update, delete).
 - Interactive UI: Roles are displayed with a customizable UI, including color-coded nodes for different roles.
 
+## Images:
+
+![Image](https://github.com/user-attachments/assets/7dabc900-ae07-4fa9-9ef7-53b9e0d3b88a)
+
+
+![Image](https://github.com/user-attachments/assets/92059f1a-0dfb-4ef1-8170-f7937231d7e9) 
+
+
+![Image](https://github.com/user-attachments/assets/264d5556-f7af-447a-ac2c-2d3f90107a26)
+
+
+![Image](https://github.com/user-attachments/assets/2323d85c-f231-4f26-9c38-059a2da11b83)
+
 
 ## Tech Stack
 
