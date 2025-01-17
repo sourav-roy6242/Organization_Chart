@@ -467,7 +467,7 @@ const OrgChart = () => {
 
       if (res.ok) {
         console.log(`Node with ID ${nodeId} deleted`);
-        // Refresh the tree after deletion
+
         fetchTreeData();
       } else {
         console.error("Failed to delete node");
@@ -478,16 +478,16 @@ const OrgChart = () => {
   };
 
   const handleUpdateNode = (nodeDatum) => {
-    // Open the form for updating the node
     setUpdateFormData({
       id: nodeDatum.id,
-      role: nodeDatum.name,
-      reportingTo: "",
+      role: nodeDatum.name,          
+      reportingTo: nodeDatum.reportingTo || "", 
     });
-    setIsTreeBlurred(true);
+    setIsTreeBlurred(true); 
   };
+  ;
 
- 
+
   const handleSubmitUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -501,9 +501,9 @@ const OrgChart = () => {
       });
 
       if (res.ok) {
-        setUpdateFormData(null); // Close the form
-        setIsTreeBlurred(false); // Remove blur
-        fetchTreeData(); // Refresh the tree
+        setUpdateFormData(null);
+        setIsTreeBlurred(false);
+        fetchTreeData();
       } else {
         console.error("Failed to update node");
       }
@@ -693,7 +693,7 @@ const OrgChart = () => {
               backgroundColor: "white",
               padding: "20px",
               borderRadius: "10px",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.5)",
             }}
           >
             <form onSubmit={handleSubmitUpdate}>
@@ -702,20 +702,19 @@ const OrgChart = () => {
                 Role Name:
                 <input
                   type="text"
-                  value={updateFormData.name}
+                  value={updateFormData.role}
                   onChange={(e) =>
                     setUpdateFormData({
                       ...updateFormData,
                       name: e.target.value,
                     })
                   }
-                  style={{ width: "90%", margin: "10px 0", padding: "10px",marginLeft:"3px" }}
+                  style={{ width: "90%", margin: "10px 0", padding: "10px", marginLeft: "3px" }}
                 />
               </label>
               <label>
                 Reporting To:
-                <input
-                  type="text"
+                <select
                   value={updateFormData.reportingTo}
                   onChange={(e) =>
                     setUpdateFormData({
@@ -723,9 +722,17 @@ const OrgChart = () => {
                       reportingTo: e.target.value,
                     })
                   }
-                  style={{width: "90%", margin: "10px 0", padding: "10px",marginLeft:"3px" }}
-                />
+                  style={{ width: "99%", margin: "10px 0", padding: "10px",  }}
+                >
+                  <option value="">Select a manager or HOD</option>
+                  <option value="Manager">Manager</option>
+                  <option value="HOD 1">HOD 1</option>
+                  <option value="HOD 2">HOD 2</option>
+                  <option value="Shift Manager">Shift Manager</option>
+
+                </select>
               </label>
+
               <br />
               <button type="submit" style={{
                 marginRight: "10px",
